@@ -1,6 +1,38 @@
 const TelegramApi = require('node-telegram-bot-api')
 const { Bot }= require('discot')
 const { UserTg } = require('./models');
+const getTxRs = require('./getTxResult');
+
+const { faucetsToken } = require('./api');
+
+
+const sendToken = async(address, callBack) => {
+    const res = await faucetsToken({
+		address: address
+	})
+    if (res.code === '20000') {
+        callBack({
+            status: 'pending'
+        })
+        const transactionId = res.data.transactionId
+        try {
+            await getTxRs(transactionId)
+            callBack({
+                status: 'success'
+            })
+        } catch (error) {
+            callBack({
+                status: 'error',
+                message: error
+            })
+        }
+    } else {
+        callBack({
+            status: 'error',
+            message: res.message
+        })
+    }
+}
 
 const insertItem = async(chatId, address, platForm, txId, txStatus) => {
     try{
@@ -31,7 +63,7 @@ const updateItem = async(chatId, address) => {
     }
 }
 
-const operateBotFromPlatForm = (platForm, token, callback) => {
+const operateBotFromPlatForm = (platForm, token) => {
     let robot = {}
     console.log(platForm,token)
     switch(platForm){
@@ -56,7 +88,7 @@ const operateBotFromPlatForm = (platForm, token, callback) => {
                 // } else {
                 //     sendMsg(chatId, 'This address has already received test coins and cannot receive them anymore.');
                 // }
-                callback && callback(address)
+                sendToken(address)
             });
             break;
         case 'discord':
@@ -69,7 +101,7 @@ const operateBotFromPlatForm = (platForm, token, callback) => {
                 description: 'get 1 SGR-1 token from robot',
                 action: message => {
                     message.channel.send('pong')
-                    callback && callback(address)
+                    sendToken(address)
                 }
             })
             .start(() => console.log('robot started.'));

@@ -1,17 +1,11 @@
 // const sequelize = require('./db');
 const fs = require('fs')
-// require("dotenv").config()
+require("dotenv").config()
 // const { UserTg } = require('./models');
 const { operateBotFromPlatForm } = require('./utils')
-const config = JSON.parse(fs.readFileSync('./config.json'))
-
-
-const sendToken = async(address) => {
-
-}
 
 try{
-    operateBotFromPlatForm(config.platForm, config.robotToken, sendToken)
+    operateBotFromPlatForm(process.env.platForm, process.env.robotToken)
 }catch(e){
     console.log(e)
 }

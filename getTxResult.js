@@ -23,11 +23,10 @@ async function getTxRs(TransactionId, chainId = 'tDVW', reGetCount = -280) {
   const rpcUrl = getRpcUrls()[chainId];
   const instance = getAElf(rpcUrl);
   const txResult = await getTxResult(instance, TransactionId, reGetCount);
-//   if (txResult.Status.toLowerCase() === 'mined') {
-//     return txResult;
-//   }
-//   throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
-  return txResult.Status.toLowerCase();
+  if (txResult.Status.toLowerCase() === 'mined') {
+    return txResult;
+  }
+  throw Error('Transaction error:' + TransactionId);
 }
 
 module.exports = getTxRs
