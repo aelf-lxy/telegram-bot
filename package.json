@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "build": "pm2 start index.js",
     "start": "pm2 start index.js",
     "stop": "pm2 stop all"
   },
@@ -14,6 +15,7 @@
   "dependencies": {
     "@portkey/contracts": "2.0.0-alpha.26",
     "@portkey/utils": "^2.1.0",
+    "@vercel/node": "^3.0.22",
     "aelf-sdk": "^3.4.5",
     "axios": "^1.6.7",
     "discord.js": "^14.14.1",
