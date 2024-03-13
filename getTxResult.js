@@ -1,4 +1,4 @@
-const AElf  =  require('aelf-sdk');
+const AElf = require('aelf-sdk');
 const { getTxResult } =require('@portkey/contracts');
 
 function getAElf(rpcUrl) {
@@ -13,16 +13,17 @@ function getAElf(rpcUrl) {
 
 const getRpcUrls = () => {
   return {
-    AELF: 'https://aelf-public-node.aelf.io',
-    tDVV: 'https://tdvv-node.eforest.finance',
-    tDVW: 'https://tdvv-node.eforest.finance',
+    AELF: 'https://aelf-test-node.aelf.io',
+    tDVV: 'https://tdvv-test-node.aelf.io',
+    tDVW: 'https://tdvw-test-node.aelf.io',
   };
 };
 
-async function getTxRs(TransactionId, chainId = 'tDVW', reGetCount = -280) {
+async function getTxRs(TransactionId, chainId = 'tDVW', reGetCount = -280, notExistedReGetCount = -5) {
   const rpcUrl = getRpcUrls()[chainId];
   const instance = getAElf(rpcUrl);
-  const txResult = await getTxResult(instance, TransactionId, reGetCount);
+  const txResult = await getTxResult(instance, TransactionId, reGetCount, notExistedReGetCount);
+  console.log('TransactionId-----------',TransactionId, txResult)
   if (txResult.Status.toLowerCase() === 'mined') {
     return txResult;
   }
