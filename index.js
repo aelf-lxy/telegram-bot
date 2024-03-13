@@ -5,7 +5,7 @@ require("dotenv").config()
 const { operateBotFromPlatForm } = require('./utils')
 
 try{
-    operateBotFromPlatForm(process.env.platForm, process.env.robotToken)
+    operateBotFromPlatForm(process.env.platForm, process.env.robotToken, process.env.clientId)
 }catch(e){
     console.log(e)
 }
