@@ -25,8 +25,7 @@ const sendToken = async (address, callBack) => {
         })
       } catch (error) {
         callBack({
-          status: 'error',
-          message: error
+          status: 'networkError'
         })
       }
     } else {
@@ -37,8 +36,7 @@ const sendToken = async (address, callBack) => {
     }
   } catch (error) {
     callBack({
-      status: 'error',
-      message: error
+      status: 'networkError'
     })
   }
 
@@ -122,9 +120,11 @@ const operateBotFromPlatForm = (platForm, token, clientId) => {
           const { status, message } = res;
           if (status === 'success') {
             const { amount, symbol, address } = res.data;
-            interaction.reply(`${user}，sending ${amount} ${symbol} token to ${address}`);
+            interaction.reply(`Hi ${user},${amount} ${symbol} is sent to your wallet address ${address}, please check.<br/>Note: Each address can only claim once.`);
           } else if (status === 'error') {
             interaction.reply(`${user}，${message}`);
+          } else if(status === 'networkError'){
+            interaction.reply(`Hi ${user},the transaction to your wallet address ${address} failed due to network or server issues. Please try again.`);
           }
         })
 
